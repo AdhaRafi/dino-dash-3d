@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="16" fill="#2E8B57"/>
+  <!-- Stylized low-poly Dino Head & Body in Warm Sand Beige & Soft White -->
+  <path d="M 38 12 L 52 12 L 52 24 L 46 24 L 46 28 L 38 28 L 38 34 L 28 34 L 28 44 L 22 44 L 22 48 L 16 48 L 16 44 L 18 36 L 22 30 L 28 26 L 34 26 L 34 18 L 38 18 Z" fill="#FAF8F5"/>
+  <rect x="44" y="16" width="3" height="3" fill="#1A201C"/>
+  <rect x="24" y="44" width="4" height="10" fill="#FAF8F5"/>
+  <rect x="32" y="40" width="4" height="14" fill="#FAF8F5"/>
+  <!-- Coral runner accent -->
+  <circle cx="50" cy="50" r="5" fill="#E76F51"/>
+</svg>

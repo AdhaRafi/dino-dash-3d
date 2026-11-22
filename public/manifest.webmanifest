@@ -1,0 +1,17 @@
+{
+  "name": "Dino Dash 3D",
+  "short_name": "DinoDash3D",
+  "description": "Game endless runner 3D di padang gurun dengan dinosaurus gesit.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAF8F5",
+  "theme_color": "#2E8B57",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

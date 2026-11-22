@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.vite/
+.playwright-mcp/
+*.blend
+*.blend1
+*.log
+.DS_Store
+.env
+.env.*

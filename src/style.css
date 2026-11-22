@@ -1,0 +1,621 @@
+/* Dino Dash 3D - Stylesheet
+   Crafted with high contrast (WCAG AA), full mobile responsiveness, and juicy arcade flair.
+*/
+
+:root {
+  --color-primary: #2E8B57;
+  --color-primary-dark: #226741;
+  --color-accent: #E76F51;
+  --color-accent-hover: #D45B3D;
+  --color-sand: #EED9B3;
+  --color-sand-border: #DBC59C;
+  --color-sand-dark: #8C6D42;
+  --color-surface: #FAF8F5;
+  --color-surface-trans: rgba(250, 248, 245, 0.94);
+  --color-text-main: #1A201C;
+  --color-text-muted: #4A564E;
+  --color-sky: #F6E7C6;
+
+  --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 8px 24px rgba(26, 32, 28, 0.12), 0 2px 6px rgba(26, 32, 28, 0.08);
+  --shadow-btn: 0 4px 12px rgba(231, 111, 81, 0.28);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-sky);
+  color: var(--color-text-main);
+  font-family: var(--font-family);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* Base Game Container */
+.game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3D Canvas */
+#game-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+}
+
+/* Helper Class */
+.hidden {
+  display: none !important;
+}
+
+/* Floating Score Popups */
+.score-popups-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 12;
+  overflow: hidden;
+}
+
+.score-popup-item {
+  position: absolute;
+  font-size: 20px;
+  font-weight: 900;
+  color: #E76F51;
+  text-shadow: 0 2px 6px rgba(255, 255, 255, 0.9), 0 0 10px rgba(231, 111, 81, 0.4);
+  transform: translate(-50%, -50%);
+  animation: floatUpFade 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes floatUpFade {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20%) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -60%) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -140%) scale(0.9);
+  }
+}
+
+/* In-Game HUD */
+.hud-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hud-scores {
+  display: flex;
+  gap: 10px;
+}
+
+.hud-score-card {
+  background: var(--color-surface-trans);
+  border: 2px solid var(--color-sand-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.hud-phase-card .phase-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+.hud-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.hud-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.hud-controls {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.hud-btn {
+  background: var(--color-surface-trans);
+  border: 2px solid var(--color-sand-border);
+  color: var(--color-text-main);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  min-width: 44px;
+  transition: background-color 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.hud-btn:hover {
+  background: #FFFFFF;
+  border-color: var(--color-primary);
+}
+
+.hud-btn:active {
+  transform: scale(0.96);
+}
+
+.hud-btn:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Mobile Touch Controls */
+.mobile-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 15;
+  pointer-events: auto;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mobile-control-btn {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 800;
+  border: 3px solid #FFFFFF;
+  transition: transform 0.08s, background-color 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-control-btn:active,
+.mobile-control-btn.is-pressed {
+  transform: scale(0.92);
+}
+
+.mobile-duck-button {
+  background: #d4823a;
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(212, 130, 58, 0.45);
+}
+
+.mobile-duck-button:active,
+.mobile-duck-button.is-pressed {
+  background: #ba6f2d;
+}
+
+.mobile-jump-button {
+  background: var(--color-accent);
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(231, 111, 81, 0.45);
+}
+
+.mobile-jump-button:active {
+  background: var(--color-accent-hover);
+}
+
+.mobile-control-btn .ctrl-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.mobile-control-btn .ctrl-text {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Overlay Screen Container */
+.overlay-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(46, 36, 24, 0.42);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 20;
+}
+
+/* Dialog Card */
+.card-dialog {
+  background: var(--color-surface);
+  border: 3px solid var(--color-sand-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  max-width: 450px;
+  padding: 26px 22px;
+  text-align: center;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Brand Header */
+.brand-badge {
+  display: inline-block;
+  background: var(--color-sand);
+  color: var(--color-sand-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+}
+
+.brand-title {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--color-primary-dark);
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.brand-tagline {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+/* Stats Panel */
+.stats-panel {
+  background: #FFFFFF;
+  border: 2px solid var(--color-sand-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.stat-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Instructions Panel */
+.instructions-panel {
+  background: #FFFFFF;
+  border: 1px solid var(--color-sand-border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.panel-heading {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.instructions-list {
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.instructions-list kbd {
+  background: #F0EDE6;
+  border: 1px solid #D6D0C2;
+  border-bottom: 2px solid #C4BDAC;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 700;
+}
+
+/* Settings Row */
+.settings-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.setting-chip-btn {
+  background: #FFFFFF;
+  border: 2px solid var(--color-sand-border);
+  color: var(--color-text-main);
+  border-radius: var(--radius-sm);
+  padding: 7px 11px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 42px;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.setting-chip-btn:hover {
+  border-color: var(--color-primary);
+}
+
+.setting-chip-btn:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Buttons */
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-actions.horizontal {
+  flex-direction: row;
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--color-accent);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 13px 20px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 50px;
+  box-shadow: var(--shadow-btn);
+  transition: background-color 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 6px 16px rgba(231, 111, 81, 0.38);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid #1A201C;
+  outline-offset: 3px;
+}
+
+.btn-secondary {
+  flex: 1;
+  background: #FFFFFF;
+  border: 2px solid var(--color-sand-border);
+  color: var(--color-text-main);
+  border-radius: var(--radius-md);
+  padding: 13px 20px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 50px;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-primary);
+  background: #FAF8F5;
+}
+
+.btn-secondary:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Game Over Dialog */
+.dialog-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--color-text-main);
+  margin-bottom: 8px;
+}
+
+.dialog-text {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-bottom: 18px;
+}
+
+.dialog-tip {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-top: 14px;
+}
+
+.new-record-pill {
+  display: inline-block;
+  background: #FFF2C6;
+  border: 2px solid #E4B325;
+  color: #8C6200;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+  animation: pulsePill 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes pulsePill {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+.gameover-scores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.score-box {
+  background: #FFFFFF;
+  border: 2px solid var(--color-sand-border);
+  border-radius: var(--radius-md);
+  padding: 12px 10px;
+}
+
+.score-box.current {
+  border-color: var(--color-accent);
+}
+
+.box-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.box-number {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--color-text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+.score-box.current .box-number {
+  color: var(--color-accent);
+}
+
+.gameover-tip {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+/* Mobile Media Queries */
+@media (max-width: 600px) {
+  .hud-overlay {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+
+  .hud-btn .btn-text {
+    display: none;
+  }
+
+  .hud-btn {
+    padding: 8px 10px;
+  }
+
+  .hud-value {
+    font-size: 18px;
+  }
+
+  .card-dialog {
+    padding: 20px 16px;
+  }
+
+  .brand-title {
+    font-size: 26px;
+  }
+
+  .mobile-controls {
+    bottom: 18px;
+    right: 18px;
+  }
+
+  .mobile-jump-button {
+    width: 78px;
+    height: 78px;
+  }
+}

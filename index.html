@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Dino Dash 3D: Game endless runner dinosaurus 3D di browser. Mulai cepat, hindari rintangan, dan cetak skor tertinggi.">
+  <meta name="theme-color" content="#4f8f3c">
+  <title>Dino Dash 3D</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div id="app" class="game-container">
+    <!-- 3D Canvas -->
+    <canvas id="game-canvas" aria-label="Area permainan 3D Dino Dash"></canvas>
+
+    <!-- Floating Score Popups Container -->
+    <div id="score-popups" class="score-popups-container" aria-hidden="true"></div>
+
+    <!-- In-Game HUD -->
+    <header id="game-hud" class="hud-overlay hidden" aria-label="Informasi Permainan">
+      <div class="hud-scores">
+        <div class="hud-score-card">
+          <span class="hud-label">Skor</span>
+          <span id="hud-current-score" class="hud-value">0</span>
+        </div>
+        <div class="hud-score-card">
+          <span class="hud-label">Terbaik</span>
+          <span id="hud-high-score" class="hud-value">0</span>
+        </div>
+        <div class="hud-score-card hud-phase-card">
+          <span class="hud-label">Waktu</span>
+          <div class="phase-value">
+            <span id="hud-phase-icon">☀️</span>
+            <span id="hud-phase-text">Siang</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hud-controls">
+        <button id="hud-cam-btn" class="hud-btn" type="button" aria-label="Ganti Sudut Kamera">
+          <span class="btn-icon">🎥</span>
+          <span id="hud-cam-text" class="btn-text">Kamera 3/4</span>
+        </button>
+        <button id="hud-mute-btn" class="hud-btn" type="button" aria-label="Beralih Suara">
+          <span id="hud-mute-icon" class="btn-icon">🔊</span>
+          <span id="hud-mute-text" class="btn-text">Suara</span>
+        </button>
+        <button id="hud-pause-btn" class="hud-btn" type="button" aria-label="Jeda Permainan">
+          <span class="btn-icon">⏸</span>
+          <span class="btn-text">Jeda</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Touch Controls -->
+    <div id="mobile-controls" class="mobile-controls hidden">
+      <button id="mobile-duck-btn" class="mobile-control-btn mobile-duck-button" type="button" aria-label="Jongkok">
+        <span class="ctrl-icon">▼</span>
+        <span class="ctrl-text">JONGKOK</span>
+      </button>
+      <button id="mobile-jump-btn" class="mobile-control-btn mobile-jump-button" type="button" aria-label="Lompat">
+        <span class="ctrl-icon">▲</span>
+        <span class="ctrl-text">LOMPAT</span>
+      </button>
+    </div>
+
+    <!-- Start Screen Overlay -->
+    <section id="start-screen" class="overlay-screen" aria-labelledby="start-title">
+      <div class="card-dialog">
+        <div class="card-header">
+          <div class="brand-badge">ASET 3D T-REX IJO</div>
+          <h1 id="start-title" class="brand-title">Dino Dash 3D</h1>
+          <p class="brand-tagline">Lompat dan taklukkan padang gurun 3D dengan siklus siang malam.</p>
+        </div>
+
+        <div class="stats-panel">
+          <div class="stat-item">
+            <span class="stat-label">Skor Terbaik Tersimpan</span>
+            <span id="start-high-score" class="stat-val">0</span>
+          </div>
+        </div>
+
+        <div class="instructions-panel">
+          <h2 class="panel-heading">Kontrol Bermain</h2>
+          <ul class="instructions-list">
+            <li><strong>Lompat:</strong> Tekan <kbd>Space</kbd>, <kbd>↑ Panah Atas</kbd>, atau <kbd>W</kbd> (Desktop), atau ketuk tombol <kbd>Lompat</kbd> (Mobile).</li>
+            <li><strong>Jongkok:</strong> Tekan <kbd>↓ Panah Bawah</kbd> atau <kbd>S</kbd> (Desktop), atau tahan tombol <kbd>Jongkok</kbd> (Mobile) untuk merunduk menghindari burung terbang.</li>
+            <li><strong>Kamera:</strong> Tekan <kbd>C</kbd> untuk berganti antara <strong>Kamera 3/4 Dinamis</strong> dan <strong>Samping 3D</strong>.</li>
+            <li><strong>Jeda:</strong> Tekan <kbd>Esc</kbd> atau tombol jeda. Permainan otomatis jeda saat tab berpindah.</li>
+          </ul>
+        </div>
+
+        <div class="settings-row">
+          <button id="start-cam-toggle" class="setting-chip-btn" type="button">
+            <span>🎥</span>
+            <span id="start-cam-label">Kamera: 3/4 Dinamis</span>
+          </button>
+          <button id="start-skin-toggle" class="setting-chip-btn" type="button">
+            <span>🦖</span>
+            <span id="start-skin-label">Warna: T-Rex Ijo</span>
+          </button>
+          <button id="start-mute-toggle" class="setting-chip-btn" type="button">
+            <span id="start-mute-icon">🔊</span>
+            <span id="start-mute-label">Suara: Aktif</span>
+          </button>
+          <button id="start-shake-toggle" class="setting-chip-btn" type="button">
+            <span id="start-shake-icon">📳</span>
+            <span id="start-shake-label">Guncangan Layar: Aktif</span>
+          </button>
+        </div>
+
+        <div class="card-actions">
+          <button id="start-play-btn" class="btn-primary" type="button">
+            Mulai Bermain
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pause Screen Modal -->
+    <section id="pause-screen" class="overlay-screen hidden" aria-labelledby="pause-title" role="dialog" aria-modal="true">
+      <div class="card-dialog">
+        <h2 id="pause-title" class="dialog-title">Permainan Dijeda</h2>
+        <p class="dialog-text">Lanjutkan ronde Anda atau mulai ulang dari awal.</p>
+
+        <div class="card-actions horizontal">
+          <button id="pause-resume-btn" class="btn-primary" type="button">
+            Lanjutkan
+          </button>
+          <button id="pause-restart-btn" class="btn-secondary" type="button">
+            Mulai Ulang
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Over Screen Overlay -->
+    <section id="gameover-screen" class="overlay-screen hidden" aria-labelledby="gameover-title" role="dialog" aria-modal="true">
+      <div class="card-dialog">
+        <h2 id="gameover-title" class="dialog-title">Ronde Berakhir</h2>
+
+        <div id="new-record-badge" class="new-record-pill hidden" aria-live="polite">
+          ★ REKOR SKOR BARU! ★
+        </div>
+
+        <div class="gameover-scores">
+          <div class="score-box current">
+            <span class="box-label">Skor Ronde Ini</span>
+            <span id="gameover-final-score" class="box-number">0</span>
+          </div>
+          <div class="score-box best">
+            <span class="box-label">Skor Tertinggi</span>
+            <span id="gameover-high-score" class="box-number">0</span>
+          </div>
+        </div>
+
+        <p class="gameover-tip">Tips: Rintangan semakin cepat seiring bertambahnya jarak lari dinosaurus.</p>
+
+        <div class="card-actions">
+          <button id="gameover-restart-btn" class="btn-primary" type="button">
+            Main Lagi
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- WebGL Unsupported Fallback Screen -->
+    <section id="webgl-error-screen" class="overlay-screen hidden" aria-labelledby="webgl-title" role="alert">
+      <div class="card-dialog">
+        <h2 id="webgl-title" class="dialog-title">WebGL 2 Tidak Tersedia</h2>
+        <p class="dialog-text">
+          Browser atau perangkat Anda tidak mendukung WebGL 2 yang dibutuhkan untuk menjalankan grafis 3D Dino Dash.
+        </p>
+        <p class="dialog-tip">
+          Silakan coba perbarui browser Anda ke versi terbaru atau aktifkan akselerasi perangkat keras (hardware acceleration) di pengaturan browser.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
